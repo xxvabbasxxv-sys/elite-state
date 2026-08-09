@@ -16,7 +16,7 @@ connectBtn.addEventListener("click", () => {
 ["discordTop","discordFooter"].forEach(id => {
   document.getElementById(id).addEventListener("click", e => {
     e.preventDefault();
-    const discord = "https://discord.gg/YOUR-DISCORD";
+    const discord = "https://discord.gg/eli";
     window.open(discord, "_blank");
   });
 });
