@@ -1,5 +1,0 @@
-fx_version 'cerulean'
-game 'gta5'
-author 'Private server'
-description 'Secure bridge from QBCore Control to qb-inventory and txAdmin'
-server_script 'server.lua'
