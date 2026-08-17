@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELITE STATE | إلايت ستيت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#05070a;
+    --bg-panel:#0c121a;
+    --bg-panel-2:#111925;
+    --primary:#9bd9ff;
+    --primary-dim:#5f8fab;
+    --gold:#c9a24b;
+    --text:#e9f1f8;
+    --muted:#7c8ca0;
+    --border:rgba(155,217,255,.14);
+    --border-strong:rgba(155,217,255,.28);
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Tajawal', sans-serif;
+    line-height:1.75;
+    min-height:100vh;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  /* ---- background texture: blueprint grid + watermark ---- */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:.35;
+    pointer-events:none;
+    z-index:0;
+    mask-image:radial-gradient(ellipse at 50% 0%, black 0%, transparent 70%);
+  }
+  .watermark{
+    position:fixed; inset:0;
+    display:flex; flex-wrap:wrap; align-content:center; justify-content:center;
+    gap:60px 90px;
+    transform:rotate(-18deg) scale(1.4);
+    opacity:.025;
+    pointer-events:none;
+    z-index:0;
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:6px;
+    color:var(--primary);
+    white-space:nowrap;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  img,svg{display:block;}
+
+  /* ---- header ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(5,7,10,.86);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar{
+    max-width:1240px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:20px;
+    padding:16px 24px;
+  }
+  .brand{display:flex; align-items:center; gap:12px;}
+  .seal{width:38px; height:38px; flex-shrink:0;}
+  .brand-text{display:flex; flex-direction:column; line-height:1.1;}
+  .brand-en{font-family:'JetBrains Mono', monospace; font-weight:700; letter-spacing:3px; font-size:15px; color:var(--primary);}
+  .brand-ar{font-size:12px; color:var(--muted); letter-spacing:1px; margin-top:3px;}
+
+  .cta-group{display:flex; align-items:center; gap:10px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:10px 18px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:14px;
+    border:1px solid var(--border-strong);
+    background:var(--bg-panel-2);
+    color:var(--text);
+    cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease, background .15s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px); border-color:var(--primary);}
+  .btn-primary{
+    background:linear-gradient(180deg, var(--primary) 0%, #7fc4ee 100%);
+    color:#05070a;
+    border:1px solid var(--primary);
+  }
+  .btn-primary:hover{box-shadow:0 8px 24px -8px rgba(155,217,255,.55);}
+  .btn-gold{border-color:rgba(201,162,75,.5); background:rgba(201,162,75,.08); color:var(--gold);}
+  .btn-gold:hover{border-color:var(--gold);}
+
+  nav.tabs{
+    max-width:1240px; margin:0 auto;
+    display:flex; gap:4px;
+    padding:0 24px 14px;
+    overflow-x:auto;
+  }
+  .tab-btn{
+    font-family:'Tajawal', sans-serif;
+    font-weight:700; font-size:14px;
+    padding:9px 18px;
+    border-radius:9px;
+    color:var(--muted);
+    background:transparent;
+    border:1px solid transparent;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:all .15s ease;
+  }
+  .tab-btn:hover{color:var(--text);}
+  .tab-btn.active{
+    color:var(--primary);
+    background:rgba(155,217,255,.08);
+    border-color:var(--border-strong);
+  }
+
+  main{position:relative; z-index:1; max-width:1240px; margin:0 auto; padding:0 24px 100px;}
+  .page{display:none; animation:fade .4s ease;}
+  .page.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ---- hero ---- */
+  .hero{
+    padding:90px 0 60px;
+    text-align:center;
+    position:relative;
+  }
+  .hero-seal{width:96px; height:96px; margin:0 auto 26px;}
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px; letter-spacing:5px;
+    color:var(--gold);
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(38px, 7vw, 74px);
+    font-weight:900;
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:4px;
+    color:var(--text);
+    text-shadow:0 0 40px rgba(155,217,255,.25);
+  }
+  .hero h1 span{color:var(--primary);}
+  .hero p{
+    max-width:620px; margin:22px auto 0;
+    color:var(--muted);
+    font-size:clamp(15px, 2vw, 18px);
+  }
+  .hero-actions{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:14px;
+    margin-top:38px;
+  }
+  .hero-actions .btn{padding:14px 26px; font-size:15px;}
+
+  /* ---- stats ---- */
+  .stats{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px;
+    margin-top:70px;
+  }
+  .stat{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--bg-panel); padding:26px 18px; text-align:center;
+  }
+  .stat b{
+    display:block; font-family:'JetBrains Mono',monospace;
+    font-size:26px; color:var(--primary); margin-bottom:6px;
+  }
+  .stat span{color:var(--muted); font-size:13.5px;}
+
+  /* ---- features ---- */
+  .section-title{
+    display:flex; align-items:center; gap:14px;
+    margin:80px 0 30px;
+  }
+  .section-title .line{flex:1; height:1px; background:var(--border);}
+  .section-title h2{font-size:22px; font-weight:800;}
+  .section-title small{font-family:'JetBrains Mono',monospace; color:var(--muted); font-size:11px; letter-spacing:2px;}
+
+  .features{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .feature{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+    padding:28px 24px;
+  }
+  .feature .ic{
+    width:42px; height:42px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(155,217,255,.08); border:1px solid var(--border-strong);
+    margin-bottom:16px; font-size:19px;
+  }
+  .feature h3{font-size:16px; margin-bottom:8px; font-weight:800;}
+  .feature p{color:var(--muted); font-size:14px;}
+
+  footer{
+    border-top:1px solid var(--border);
+    padding:34px 24px; text-align:center;
+    color:var(--muted); font-size:12.5px;
+    position:relative; z-index:1;
+  }
+  footer .fbrand{color:var(--primary); font-family:'JetBrains Mono',monospace; letter-spacing:2px; font-weight:700; margin-bottom:8px;}
+
+  /* ---- rules page ---- */
+  .page-header{padding:56px 0 10px; text-align:center;}
+  .page-header .eyebrow{margin-bottom:14px;}
+  .page-header h2{font-size:clamp(28px,4vw,42px); font-weight:900;}
+  .page-header p{max-width:560px; margin:16px auto 0; color:var(--muted); font-size:15px;}
+
+  .article-group{margin-top:56px;}
+  .article-group h3{
+    display:flex; align-items:center; gap:12px;
+    font-size:15px; color:var(--gold); font-weight:800;
+    letter-spacing:1px; margin-bottom:18px;
+  }
+  .article-group h3::before{
+    content:""; width:22px; height:1px; background:var(--gold);
+  }
+  .article-list{display:flex; flex-direction:column; gap:12px;}
+  .article{
+    display:flex; gap:16px;
+    border:1px solid var(--border); border-radius:12px;
+    background:var(--bg-panel); padding:18px 20px;
+  }
+  .article .num{
+    font-family:'JetBrains Mono',monospace; font-weight:700; font-size:13px;
+    color:var(--primary); flex-shrink:0;
+    border:1px solid var(--border-strong); border-radius:8px;
+    width:74px; height:34px; display:flex; align-items:center; justify-content:center;
+  }
+  .article p{font-size:14.5px; color:var(--text);}
+  .article p b{color:var(--primary); font-weight:800;}
+
+  /* ---- jobs ---- */
+  .jobs-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:50px;}
+  .job-card{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--bg-panel); padding:24px; position:relative;
+  }
+  .job-card .ic{font-size:26px; margin-bottom:14px;}
+  .job-card h3{font-size:16.5px; font-weight:800; margin-bottom:8px;}
+  .job-card p{color:var(--muted); font-size:13.5px; margin-bottom:16px;}
+  .badge{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:20px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .badge.open{color:#8fe3a8; background:rgba(143,227,168,.1); border:1px solid rgba(143,227,168,.3);}
+  .badge.closed{color:#e39a8f; background:rgba(227,154,143,.1); border:1px solid rgba(227,154,143,.3);}
+  .badge.dot{width:6px; height:6px; border-radius:50%; background:currentColor;}
+
+  /* ---- schedule ---- */
+  .schedule-wrap{
+    margin-top:50px; border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; background:var(--bg-panel);
+  }
+  table{width:100%; border-collapse:collapse;}
+  thead th{
+    font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:1px;
+    text-align:right; color:var(--muted); font-weight:700;
+    padding:16px 20px; border-bottom:1px solid var(--border); background:var(--bg-panel-2);
+  }
+  tbody td{padding:16px 20px; border-bottom:1px solid var(--border); font-size:14px;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody td.job-name{font-weight:800; color:var(--text);}
+  .note-box{
+    margin-top:22px; border:1px dashed var(--border-strong); border-radius:12px;
+    padding:16px 20px; font-size:13.5px; color:var(--muted);
+  }
+  .note-box b{color:var(--primary);}
+
+  /* ---- streamers ---- */
+  .streamers-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:50px;}
+  .streamer-card{
+    border:1px solid var(--border); border-radius:var(--radius);
+    background:var(--bg-panel); overflow:hidden; position:relative;
+  }
+  .streamer-cover{
+    height:110px; width:100%;
+    background:linear-gradient(135deg, rgba(155,217,255,.14), rgba(201,162,75,.1));
+    position:relative;
+  }
+  .streamer-live{
+    position:absolute; top:12px; left:12px;
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700;
+    padding:5px 10px; border-radius:20px;
+  }
+  .streamer-live.on{color:#ff6b6b; background:rgba(255,107,107,.12); border:1px solid rgba(255,107,107,.35);}
+  .streamer-live.off{color:var(--muted); background:rgba(124,140,160,.1); border:1px solid var(--border-strong);}
+  .streamer-live .dot{width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .streamer-avatar{
+    width:64px; height:64px; border-radius:50%;
+    background:var(--bg-panel-2); border:3px solid var(--bg-panel);
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px;
+    position:absolute; bottom:-30px; right:20px;
+  }
+  .streamer-body{padding:40px 20px 22px;}
+  .streamer-body h3{font-size:16px; font-weight:800; margin-bottom:4px;}
+  .streamer-body .platform{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--gold); letter-spacing:1px; margin-bottom:12px;}
+  .streamer-body p{color:var(--muted); font-size:13.5px; margin-bottom:16px;}
+  .streamer-body .btn{width:100%; justify-content:center; padding:10px;}
+
+  /* ---- gallery ---- */
+  .gallery-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:50px;}
+  .gallery-item{
+    aspect-ratio:4/3; border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--border); position:relative;
+    background:linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+  }
+  .gallery-item img{width:100%; height:100%; object-fit:cover;}
+  .gallery-placeholder{
+    width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:8px; color:var(--muted); font-size:12px; text-align:center; padding:16px;
+  }
+  .gallery-placeholder .ic{font-size:26px; opacity:.6;}
+  .gallery-caption{
+    position:absolute; bottom:0; right:0; left:0;
+    background:linear-gradient(0deg, rgba(5,7,10,.85), transparent);
+    padding:26px 14px 10px; font-size:12.5px; font-weight:700; color:var(--text);
+  }
+
+  /* ---- responsive ---- */
+  @media (max-width:900px){
+    .stats{grid-template-columns:1fr;}
+    .features{grid-template-columns:1fr;}
+    .jobs-grid{grid-template-columns:1fr 1fr;}
+    .streamers-grid{grid-template-columns:1fr 1fr;}
+    .gallery-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .topbar{flex-direction:column; align-items:stretch;}
+    .cta-group{flex-wrap:wrap; justify-content:center;}
+    .jobs-grid{grid-template-columns:1fr;}
+    .streamers-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:1fr;}
+    thead{display:none;}
+    table, tbody, tr, td{display:block; width:100%;}
+    tbody tr{border-bottom:1px solid var(--border); padding:14px 20px;}
+    tbody td{border:none; padding:4px 0; display:flex; justify-content:space-between; gap:10px;}
+    tbody td::before{content:attr(data-label); color:var(--muted); font-size:12px;}
+  }
+
+  :focus-visible{outline:2px solid var(--primary); outline-offset:2px;}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="watermark" aria-hidden="true">
+  <span>ELITE • STATE</span><span>ELITE • STATE</span><span>ELITE • STATE</span>
+  <span>ELITE • STATE</span><span>ELITE • STATE</span><span>ELITE • STATE</span>
+  <span>ELITE • STATE</span><span>ELITE • STATE</span><span>ELITE • STATE</span>
+</div>
+
+<!-- ============ HEADER ============ -->
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <img class="seal" src="https://i.ibb.co/d0QxHd04/magic-edit-TUFIUUhk-VFl5-Ykkj-MSNi-OTVh-MTg0-NWQ2-YTZl-ODgx-Mm-Qz-Mj-Fl-ZWJh-NWQy-ZDNm-MSMx-Mj-E2-Iy-NUU.png" alt="شعار Elite State" style="border-radius:50%; object-fit:cover;">
+      <div class="brand-text">
+        <span class="brand-en">ELITE STATE</span>
+        <span class="brand-ar">سيرفر رول بلاي — FiveM</span>
+      </div>
+    </div>
+    <div class="cta-group">
+      <a class="btn" href="#" id="discordLink">💬 الديسكورد</a>
+      <a class="btn btn-gold" href="#" id="storeLink">🛒 المتجر</a>
+      <a class="btn btn-primary" href="#" id="connectLink">🎮 دخول السيرفر</a>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="أقسام الموقع">
+    <button class="tab-btn active" data-tab="home" role="tab" aria-selected="true">الرئيسية</button>
+    <button class="tab-btn" data-tab="rules" role="tab" aria-selected="false">دستور الولاية</button>
+    <button class="tab-btn" data-tab="jobs" role="tab" aria-selected="false">الوظائف</button>
+    <button class="tab-btn" data-tab="schedule" role="tab" aria-selected="false">أوقات التقديم</button>
+    <button class="tab-btn" data-tab="streamers" role="tab" aria-selected="false">الستريمرز</button>
+    <button class="tab-btn" data-tab="gallery" role="tab" aria-selected="false">صور السيرفر</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section class="page active" id="page-home">
+    <div class="hero">
+      <img class="hero-seal" src="https://i.ibb.co/d0QxHd04/magic-edit-TUFIUUhk-VFl5-Ykkj-MSNi-OTVh-MTg0-NWQ2-YTZl-ODgx-Mm-Qz-Mj-Fl-ZWJh-NWQy-ZDNm-MSMx-Mj-E2-Iy-NUU.png" alt="شعار Elite State" style="border-radius:50%; object-fit:cover;">
+      <div class="eyebrow">ROLEPLAY SERVER · EST. FIVEM</div>
+      <h1>ELITE <span>STATE</span></h1>
+      <p>سيرفر رول بلاي راقٍ على منصة FiveM — اقتصاد واقعي، وظائف حصرية، وإدارة عادلة تصون تجربتك من أول ثانية.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#" id="connectLink2">🎮 ادخل السيرفر الآن</a>
+        <a class="btn" href="#" id="discordLink2">💬 انضم للديسكورد</a>
+        <a class="btn btn-gold" href="#" id="storeLink2">🛒 تسوّق من المتجر</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>+8</b><span>وظائف رسمية فعّالة</span></div>
+        <div class="stat"><b>24/7</b><span>إدارة ودعم فني متواصل</span></div>
+        <div class="stat"><b>0%</b><span>تسامح مع الغش والمخالفات</span></div>
+      </div>
+    </div>
+
+    <div class="section-title"><small>WHY ELITE STATE</small><h2>لماذا إلايت ستيت</h2><div class="line"></div></div>
+    <div class="features">
+      <div class="feature">
+        <div class="ic">💰</div>
+        <h3>اقتصاد واقعي</h3>
+        <p>نظام اقتصادي متوازن من الرواتب إلى الاستثمار والتجارة، مصمم ليعكس واقعاً حقيقياً داخل الولاية.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">🧭</div>
+        <h3>أدوار حصرية</h3>
+        <p>من الأمن إلى الطب والإعلام، كل وظيفة لها نظامها الخاص وقصتها التي تكتبها بنفسك.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">⚖️</div>
+        <h3>إدارة عادلة</h3>
+        <p>طاقم إشراف حاضر باستمرار لضمان تجربة رول بلاي نظيفة، منضبطة، وخالية من التجاوزات.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RULES ============ -->
+  <section class="page" id="page-rules">
+    <div class="page-header">
+      <div class="eyebrow">THE CONSTITUTION</div>
+      <h2>دستور الولاية</h2>
+      <p>كل من ينضم إلى إلايت ستيت يلتزم تلقائياً بالمواد التالية. الجهل بها لا يُعفي من المسؤولية.</p>
+    </div>
+
+    <div class="article-group">
+      <h3>الباب الأول — قواعد عامة</h3>
+      <div class="article-list">
+        <div class="article"><span class="num">مادة 01</span><p><b>الغش ممنوع.</b> يُمنع استخدام أي برامج أو أدوات خارجية تخل بعدالة اللعب.</p></div>
+        <div class="article"><span class="num">مادة 02</span><p><b>لا ميتاغيمنق.</b> يُمنع استخدام معلومات من خارج الدور (فويس تشات، ديسكورد) داخل الرول بلاي.</p></div>
+        <div class="article"><span class="num">مادة 03</span><p><b>لا باورغيمنق.</b> يُمنع فرض نتيجة فعل على لاعب آخر دون منحه فرصة رد واقعية.</p></div>
+        <div class="article"><span class="num">مادة 04</span><p><b>ممنوع RDM وVDM.</b> القتل أو الدهس العشوائي دون مبرر رول بلاي مخالفة مباشرة.</p></div>
+        <div class="article"><span class="num">مادة 05</span><p><b>لا خروج من الاشتباك.</b> قطع الاتصال عمداً أثناء موقف حرج يُعرّضك للعقوبة.</p></div>
+      </div>
+    </div>
+
+    <div class="article-group">
+      <h3>الباب الثاني — قواعد الرول بلاي</h3>
+      <div class="article-list">
+        <div class="article"><span class="num">مادة 06</span><p><b>جدية الدور.</b> يُطلب الالتزام بواقعية التفاعل في جميع المواقف داخل الولاية.</p></div>
+        <div class="article"><span class="num">مادة 07</span><p><b>احترام الخوف (Fear RP).</b> التعامل بواقعية عند التهديد بالسلاح أو الخطر المباشر.</p></div>
+        <div class="article"><span class="num">مادة 08</span><p><b>قاعدة الحياة الجديدة.</b> بعد الإفاقة من إصابة قاتلة، يُمنع تذكر تفاصيل الحادثة.</p></div>
+      </div>
+    </div>
+
+    <div class="article-group">
+      <h3>الباب الثالث — السلوك المجتمعي</h3>
+      <div class="article-list">
+        <div class="article"><span class="num">مادة 09</span><p><b>الاحترام إلزامي.</b> يُمنع التنمر أو الإساءة أو التمييز بأي شكل داخل المجتمع.</p></div>
+        <div class="article"><span class="num">مادة 10</span><p><b>لا إعلانات.</b> يُمنع الترويج لسيرفرات أو خدمات خارجية داخل القنوات الرسمية.</p></div>
+        <div class="article"><span class="num">مادة 11</span><p><b>قناة التبليغ.</b> أي مخالفة تُبلَّغ عبر التذاكر الرسمية في الديسكورد فقط.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOBS ============ -->
+  <section class="page" id="page-jobs">
+    <div class="page-header">
+      <div class="eyebrow">CAREERS</div>
+      <h2>الوظائف المتاحة</h2>
+      <p>اختر دورك داخل الولاية وابدأ قصتك — كل وظيفة تفتح لك نظاماً وتجربة مختلفة تماماً.</p>
+    </div>
+
+    <div class="jobs-grid">
+      <div class="job-card">
+        <div class="ic">👮</div>
+        <h3>الشرطة (LSPD)</h3>
+        <p>حفظ الأمن وتطبيق القانون داخل حدود الولاية والاستجابة للبلاغات.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">🚑</div>
+        <h3>الإسعاف والطوارئ</h3>
+        <p>الاستجابة الطبية السريعة وإنقاذ المصابين في مواقع الحوادث.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">🔧</div>
+        <h3>الميكانيكي</h3>
+        <p>صيانة وتعديل المركبات وخدمة السحب داخل ورش الولاية.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">🚕</div>
+        <h3>سائق نقل</h3>
+        <p>نقل الركاب وتوصيل الطلبات بين أحياء ومناطق الولاية.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">⚖️</div>
+        <h3>محامٍ</h3>
+        <p>تمثيل المواطنين قانونياً والدفاع عنهم أمام محاكم الولاية.</p>
+        <span class="badge closed"><span class="dot"></span>مغلق مؤقتاً</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">📰</div>
+        <h3>إعلامي / صحفي</h3>
+        <p>تغطية أحداث الولاية إعلامياً ونقل الأخبار للمواطنين.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">🏠</div>
+        <h3>تاجر عقارات</h3>
+        <p>بيع وتأجير العقارات وإدارة السوق العقاري داخل الولاية.</p>
+        <span class="badge open"><span class="dot"></span>التقديم مفتوح</span>
+      </div>
+      <div class="job-card">
+        <div class="ic">🃏</div>
+        <h3>أدوار حرة (عصابات)</h3>
+        <p>رول بلاي إجرامي منظم ضمن ضوابط الإدارة ومواد الدستور.</p>
+        <span class="badge closed"><span class="dot"></span>مغلق مؤقتاً</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SCHEDULE ============ -->
+  <section class="page" id="page-schedule">
+    <div class="page-header">
+      <div class="eyebrow">APPLICATION HOURS</div>
+      <h2>أوقات التقديم للوظائف</h2>
+      <p>جميع الأوقات بتوقيت السيرفر الرسمي، وتُفتح التقديمات عبر الديسكورد في القسم المخصص لكل وظيفة.</p>
+    </div>
+
+    <div class="schedule-wrap">
+      <table>
+        <thead>
+          <tr><th>الوظيفة</th><th>أيام التقديم</th><th>التوقيت</th><th>الحالة</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">الشرطة</td>
+            <td data-label="الأيام">السبت، الثلاثاء</td>
+            <td data-label="التوقيت">8:00م – 10:00م</td>
+            <td data-label="الحالة"><span class="badge open"><span class="dot"></span>مفتوح</span></td>
+          </tr>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">الإسعاف</td>
+            <td data-label="الأيام">الأحد، الأربعاء</td>
+            <td data-label="التوقيت">7:00م – 9:00م</td>
+            <td data-label="الحالة"><span class="badge open"><span class="dot"></span>مفتوح</span></td>
+          </tr>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">الميكانيكي</td>
+            <td data-label="الأيام">يومياً</td>
+            <td data-label="التوقيت">6:00م – 11:00م</td>
+            <td data-label="الحالة"><span class="badge open"><span class="dot"></span>مفتوح</span></td>
+          </tr>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">المحاماة</td>
+            <td data-label="الأيام">الخميس</td>
+            <td data-label="التوقيت">9:00م – 11:00م</td>
+            <td data-label="الحالة"><span class="badge closed"><span class="dot"></span>مغلق مؤقتاً</span></td>
+          </tr>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">الإعلام</td>
+            <td data-label="الأيام">الاثنين، الجمعة</td>
+            <td data-label="التوقيت">8:00م – 10:00م</td>
+            <td data-label="الحالة"><span class="badge open"><span class="dot"></span>مفتوح</span></td>
+          </tr>
+          <tr>
+            <td class="job-name" data-label="الوظيفة">العقارات</td>
+            <td data-label="الأيام">الثلاثاء، السبت</td>
+            <td data-label="التوقيت">7:00م – 9:00م</td>
+            <td data-label="الحالة"><span class="badge open"><span class="dot"></span>مفتوح</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note-box">
+      <b>ملاحظة:</b> يُشترط قراءة «دستور الولاية» بالكامل قبل التقديم على أي وظيفة، وأي طلب يخالف الشروط يُرفض تلقائياً.
+    </div>
+  </section>
+
+  <!-- ============ STREAMERS ============ -->
+  <section class="page" id="page-streamers">
+    <div class="page-header">
+      <div class="eyebrow">CONTENT CREATORS</div>
+      <h2>ستريمرز الولاية</h2>
+      <p>تابع أحداث إلايت ستيت لحظة بلحظة عبر قنوات صنّاع المحتوى الرسميين في السيرفر.</p>
+    </div>
+
+    <div class="streamers-grid">
+      <div class="streamer-card">
+        <div class="streamer-cover">
+          <span class="streamer-live on"><span class="dot"></span>يبث الآن</span>
+          <div class="streamer-avatar">🎥</div>
+        </div>
+        <div class="streamer-body">
+          <h3>اسم الستريمر 1</h3>
+          <div class="platform">TWITCH</div>
+          <p>محتوى رول بلاي يومي داخل الولاية — أدوار شرطة وعصابات.</p>
+          <a class="btn btn-primary" href="#" data-streamer-link>▶ شاهد البث</a>
+        </div>
+      </div>
+      <div class="streamer-card">
+        <div class="streamer-cover">
+          <span class="streamer-live off"><span class="dot"></span>غير متصل</span>
+          <div class="streamer-avatar">🎥</div>
+        </div>
+        <div class="streamer-body">
+          <h3>اسم الستريمر 2</h3>
+          <div class="platform">YOUTUBE</div>
+          <p>مقاطع مختارة من أفضل مواقف الرول بلاي داخل إلايت ستيت.</p>
+          <a class="btn" href="#" data-streamer-link>▶ زيارة القناة</a>
+        </div>
+      </div>
+      <div class="streamer-card">
+        <div class="streamer-cover">
+          <span class="streamer-live off"><span class="dot"></span>غير متصل</span>
+          <div class="streamer-avatar">🎥</div>
+        </div>
+        <div class="streamer-body">
+          <h3>اسم الستريمر 3</h3>
+          <div class="platform">KICK</div>
+          <p>بث مباشر لأدوار الطب والإسعاف داخل مناطق الولاية.</p>
+          <a class="btn" href="#" data-streamer-link>▶ زيارة القناة</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <b>ملاحظة:</b> عطنا رابط قناتك على ديسكورد للانضمام لقائمة الستريمرز الرسميين وظهور اسمك هنا.
+    </div>
+  </section>
+
+  <!-- ============ GALLERY ============ -->
+  <section class="page" id="page-gallery">
+    <div class="page-header">
+      <div class="eyebrow">GALLERY</div>
+      <h2>صور السيرفر</h2>
+      <p>لقطات من داخل الولاية — مواقع، فعاليات، وأدوار حية من مجتمع إلايت ستيت.</p>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder"><span class="ic">🖼️</span>ضع صورتك هنا</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="fbrand">ELITE STATE</div>
+  <div>سيرفر رول بلاي مستقل على منصة FiveM — غير تابع لشركة Rockstar Games أو Take-Two Interactive.</div>
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab-btn');
+  const pages = document.querySelectorAll('.page');
+
+  function goTo(name){
+    tabs.forEach(t => {
+      const active = t.dataset.tab === name;
+      t.classList.toggle('active', active);
+      t.setAttribute('aria-selected', active);
+    });
+    pages.forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => goTo(t.dataset.tab)));
+
+  // ---- روابط التواصل: بدّل القيم أدناه بروابطك الحقيقية ----
+  const LINKS = {
+    discord: "https://discord.gg/your-invite",
+    store: "https://your-store-link.com",
+    connect: "fivem://connect/your-server-ip"
+  };
+  document.querySelectorAll('#discordLink, #discordLink2').forEach(el => el.href = LINKS.discord);
+  document.querySelectorAll('#storeLink, #storeLink2').forEach(el => el.href = LINKS.store);
+  document.querySelectorAll('#connectLink, #connectLink2').forEach(el => el.href = LINKS.connect);
+</script>
+
+</body>
+</html>
